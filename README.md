@@ -20,7 +20,7 @@ Este projeto tem como objetivo aplicar técnicas de Machine Learning para classi
 Foi utilizado o algoritmo Random Forest para classificação do nível de liquidez dos fundos.
 
 ## Autor(es)
-Bruna Sousa Valério dos Santos    RA: 10418640
-Danilo Ferreira Rocha             RA: 10402374
-Fernanda de Moraes Brazolin       RA: 10417732
-Yasmin Reis Toledo                RA: 10419669
+- Bruna Sousa Valério dos Santos    RA: 10418640
+- Danilo Ferreira Rocha             RA: 10402374
+- Fernanda de Moraes Brazolin       RA: 10417732
+- Yasmin Reis Toledo                RA: 10419669
