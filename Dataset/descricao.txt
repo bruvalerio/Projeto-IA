@@ -1,0 +1,16 @@
+Dataset: FUNDOS-175-CARACTERISTICAS-PUBLICO.xlsx
+
+Origem:
+Dados públicos da ANBIMA (Associação Brasileira das Entidades dos Mercados Financeiro e de Capitais).
+
+Descrição:
+O dataset contém informações sobre fundos de investimento, incluindo:
+- Categoria ANBIMA
+- Tipo de fundo
+- Composição do fundo
+- Perfil do investidor
+- Tributação
+- Prazo de pagamento de resgate
+
+Uso no projeto:
+Os dados foram utilizados para análise exploratória e para treinamento de modelo de Machine Learning para classificação do nível de liquidez dos fundos.
