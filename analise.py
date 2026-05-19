@@ -35,6 +35,29 @@ except FileNotFoundError:
     print(f"Erro: o arquivo '{arquivo}' não foi encontrado na pasta do projeto.")
     raise
 
+
+
+
+print("\n" + "=" * 60)
+print("ANÁLISE EXPLORATÓRIA DOS DADOS - BASE ORIGINAL")
+print("=" * 60)
+
+print("\nQuantidade de linhas e colunas da base original:")
+print(df.shape)
+
+print("\nPrimeiras 5 linhas da base:")
+print(df.head())
+
+print("\nTipos de dados por coluna:")
+print(df.dtypes)
+
+print("\nQuantidade de valores ausentes por coluna:")
+print(df.isnull().sum())
+
+print("\nPercentual de valores ausentes por coluna:")
+print((df.isnull().sum() / len(df) * 100).sort_values(ascending=False))
+
+
 # SELECIONAR COLUNAS RELEVANTES
 colunas_utilizadas = [
     "Categoria ANBIMA",
@@ -88,8 +111,76 @@ def classificar_liquidez(prazo):
 
 df["Nível de Liquidez"] = df["Prazo Pagamento Resgate em dias"].apply(classificar_liquidez)
 
-print("\nDistribuição da variável-alvo:")
-print(df["Nível de Liquidez"].value_counts())
+
+
+print("\n" + "=" * 60)
+print("ANÁLISE EXPLORATÓRIA APÓS TRATAMENTO")
+print("=" * 60)
+
+print("\nQuantidade de linhas e colunas após tratamento:")
+print(df.shape)
+
+print("\nEstatísticas do prazo de pagamento de resgate:")
+print(df["Prazo Pagamento Resgate em dias"].describe())
+
+distribuicao_liquidez = df["Nível de Liquidez"].value_counts()
+percentual_liquidez = df["Nível de Liquidez"].value_counts(normalize=True) * 100
+
+tabela_liquidez = pd.DataFrame({
+    "Quantidade": distribuicao_liquidez,
+    "Percentual (%)": percentual_liquidez.round(2)
+})
+
+print("\nDistribuição da variável-alvo - Nível de Liquidez:")
+print(tabela_liquidez)
+
+print("\nDistribuição das principais variáveis categóricas:")
+
+colunas_analise = [
+    "Categoria ANBIMA",
+    "Tipo ANBIMA",
+    "Tipo de Investidor",
+    "Tributação Alvo",
+    "Fundo ESG",
+    "Aberto Estatutariamente"
+]
+
+for coluna in colunas_analise:
+    if coluna in df.columns:
+        print(f"\nDistribuição da coluna: {coluna}")
+        print(df[coluna].value_counts(dropna=False).head(10))
+
+# Gráfico da variável-alvo
+plt.figure(figsize=(8, 5))
+df["Nível de Liquidez"].value_counts().plot(kind="bar")
+plt.title("Distribuição dos Fundos por Nível de Liquidez")
+plt.xlabel("Nível de Liquidez")
+plt.ylabel("Quantidade de Fundos")
+plt.tight_layout()
+plt.show()
+
+# Histograma do prazo de resgate
+plt.figure(figsize=(8,5))
+df["Prazo Pagamento Resgate em dias"].clip(upper=200).plot(kind="hist", bins=30)
+plt.title("Distribuição do Prazo de Pagamento de Resgate")
+plt.xlabel("Prazo de Pagamento de Resgate em dias")
+plt.ylabel("Quantidade de Fundos")
+plt.tight_layout()
+plt.savefig("grafico_prazo_resgate.png", dpi=300)
+plt.show()
+
+# Gráfico das 10 categorias ANBIMA mais frequentes
+if "Categoria ANBIMA" in df.columns:
+    plt.figure(figsize=(10, 6))
+    df["Categoria ANBIMA"].value_counts().head(10).plot(kind="bar")
+    plt.title("Top 10 Categorias ANBIMA mais Frequentes")
+    plt.xlabel("Categoria ANBIMA")
+    plt.ylabel("Quantidade de Fundos")
+    plt.xticks(rotation=45, ha="right")
+    plt.tight_layout()
+    plt.show()
+
+
 
 # DEFINI X (ENTRADAS) E y (ALVO)
 X = df.drop(columns=["Prazo Pagamento Resgate em dias", "Nível de Liquidez"])
@@ -161,9 +252,9 @@ print(confusion_matrix(y_test, y_pred))
 ConfusionMatrixDisplay.from_predictions(y_test, y_pred)
 plt.title("Matriz de Confusão - Classificação do Nível de Liquidez")
 plt.tight_layout()
+plt.savefig("teste2.png", dpi=300)
 plt.show()
 
-# IMPORTÂNCIA DAS VARIÁVEIS
 onehot = modelo.named_steps["preprocessamento"].named_transformers_["cat"].named_steps["onehot"]
 nomes_features = onehot.get_feature_names_out(colunas_categoricas)
 
@@ -185,4 +276,5 @@ plt.title("Top 15 Variáveis Mais Importantes no Modelo")
 plt.xlabel("Importância")
 plt.ylabel("Variável")
 plt.tight_layout()
+plt.savefig("teste.png", dpi=300)
 plt.show()
