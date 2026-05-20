@@ -4,6 +4,9 @@
 
 Este projeto tem como objetivo aplicar técnicas de Machine Learning para classificar o nível de liquidez de fundos de investimento com base em dados da ANBIMA.
 
+
+link video youtube: https://youtu.be/d5aElR-RvrI?si=ukcKgU0kbKjZab3f 
+
 ## Tecnologias utilizadas
 - Python
 - Pandas
